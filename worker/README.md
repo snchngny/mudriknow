@@ -2,6 +2,8 @@
 
 Cloudflare Workersで投稿を受け、GitHub Actionsが30分ごとにmanual/catalog.jsonへ自動取り込みする。予定実行には遅延があり得る。利用者のGitHubアカウント・ローカルサーバー・Dockerは不要。GitHubトークンをCloudflareへ預けない
 
+公式受付はmanual/service.jsonに掲載し、アプリが自動取得する。公開URLにはアプリ名を使い、個人のメールアドレスや元アカウント名を含めない
+
 ## 運営者の初期設定
 
 1. Cloudflareの無料アカウントを用意し、Workers Paidは有効化しない
