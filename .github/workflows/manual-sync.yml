@@ -1,0 +1,33 @@
+name: manual-sync
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,37 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: manual-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx tsc --skipLibCheck --target ES2022 --module commonjs --rootDir . --outDir .local/manual-sync worker/index.ts
+      - run: node scripts/sync-manuals.cjs
+      - name: Save public manual metadata
+        shell: bash
+        run: |
+          if git diff --quiet -- manual/catalog.json; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add manual/catalog.json
+          git commit -m '匿名投稿の資料案内を自動取り込み'
+          git push origin HEAD:main
