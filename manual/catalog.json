@@ -1,4 +1,15 @@
 {
   "schemaVersion": 1,
-  "manuals": []
+  "manuals": [
+    {
+      "id": "1e8ebc1d377afd8353a6ef00f1453a1416ff153feb91d41967afd71aa49f50f7",
+      "appName": "7-Zip",
+      "platform": "windows",
+      "title": "7-Zip official FAQ",
+      "url": "https://www.7-zip.org/faq.html",
+      "documentVersion": "",
+      "language": "en",
+      "license": "URL only; original content remains with its publisher"
+    }
+  ]
 }
