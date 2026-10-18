@@ -8,7 +8,7 @@ Cloudflare Workersで投稿を受け、公開GitHubのmanual/catalog.jsonへ自�
 2. GitHubで対象repoだけにContents読み書きを許可したfine-grained tokenを作成。有効期限を設定する
 3. worker/で`npx wrangler login`、`npx wrangler secret put GITHUB_TOKEN`を実行。トークンをファイルへ保存しない
 4. `npx wrangler deploy`で公開。wrangler.jsoncにアカウントIDや秘密値を入れない
-5. 表示されたHTTPSの受付URLをアプリの接続設定へ入力する。共有台帳URLは既定のGitHub Rawのまま使用できる
+5. manual/service.jsonのsubmissionUrlへ公開URLを設定しGitHubへ反映。アプリが自動取得する。個別の受付URLはアプリの接続設定でも上書きできる。共有台帳は既定のGitHub Rawのまま使用できる
 
 無料枠を超えた場合は受付が制限される。自動で有料プランへ変更しない。運営用tokenは利用者やアプリへ配布しない
 

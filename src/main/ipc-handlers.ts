@@ -2,6 +2,7 @@ import { ipcMain, BrowserWindow, app, dialog } from "electron";
 import { Config, ContextPayload, IPC, Action, VisibleWindow, ModelDisplay, ProviderStatus } from "../shared/types";
 import { OpenCodeClient, OpenCodeEvent, findOpenCodeBin, isNativeOpenCodeBin } from "./opencode-client";
 import { AppResearchService, applicationKey, formatAppResearch } from "./app-research";
+import { resolveSubmissionEndpoint } from "./manual-service";
 import { buildSystemPrompt, ACTION_PROMPT_FULL, GUIDE_PROMPT_FULL } from "../shared/prompts";
 import { computeGridGeometry } from "../shared/grid-geometry";
 import { buildCleanOpenCodeEnv, providerFromModelId, OpenCodeAuthFile, knownProviderNames, envVarForProvider, hasProviderEnvCredential } from "../shared/providers";
@@ -987,8 +988,7 @@ export function registerIpcHandlers(
   ipcMain.handle("submit-manual", async (_event, value: unknown) => {
     try {
       const manual = validateSubmission(value);
-      if (!config.manualSubmissionUrl) throw new Error("先に資料投稿の受付先を設定してください");
-      const base = submissionEndpoint(config.manualSubmissionUrl);
+      const base = await resolveSubmissionEndpoint(config.manualSubmissionUrl);
       const response = await fetch(base + "/submissions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(manual), redirect: "error", signal: AbortSignal.timeout(15000) });
       if (!response.ok) throw new Error(response.status === 429 ? "投稿回数の上限です。時間を置いてください" : "投稿を受け付けられませんでした");
       const result = await response.json() as { id?: string };
