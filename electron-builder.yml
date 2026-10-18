@@ -38,8 +38,8 @@ mac:
     NSScreenCaptureUsageDescription: 質問に答えるため、選択したアプリの画面を取得します
   artifactName: MudrikNow-${version}-${arch}.${ext}
   binaries:
-    - Resources/app.asar.unpacked/node_modules/get-windows/main
-    - Resources/opencode/opencode
+    - Contents/Resources/app.asar.unpacked/node_modules/get-windows/main
+    - Contents/Resources/opencode/opencode
 nsis:
   oneClick: false
   perMachine: false

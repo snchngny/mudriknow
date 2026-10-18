@@ -50,6 +50,9 @@ jobs:
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
         run: npx electron-builder --publish never
 
+      - name: Verify bundled runtime without Node on PATH
+        run: node scripts/check-packaged-runtime.cjs
+
       - uses: actions/upload-artifact@v4
         with:
           name: MudrikNow-${{ matrix.os }}
