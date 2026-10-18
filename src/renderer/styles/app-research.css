@@ -1,0 +1,13 @@
+.app-research { padding: 12px; margin: 8px 0 14px; border: 1px solid #77889955; border-radius: 10px; font-size: 13px; overflow-wrap: anywhere; }
+.app-research > div { margin: 6px 0; }
+.app-research button { color: inherit; background: transparent; border: 1px solid #77889966; border-radius: 5px; padding: 4px 8px; cursor: pointer; }
+.app-research button:disabled { opacity: .5; cursor: default; }
+.app-research details { margin-top: 10px; }
+.app-research summary { cursor: pointer; }
+.app-research p { white-space: pre-wrap; }
+.app-research .app-research-link { border: 0; text-align: left; text-decoration: underline; padding: 4px 0; }
+.app-research form { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.app-research { max-height: 40vh; overflow-y: auto; flex-shrink: 0; }
+.app-research form label { display: flex; flex-direction: column; gap: 3px; }
+.app-research input:not([type=checkbox]), .app-research select { max-width: 100%; min-width: 0; padding: 5px; border: 1px solid #77889966; border-radius: 4px; color: inherit; background: var(--bg-primary, transparent); }
+.app-research form input { width: 100%; box-sizing: border-box; }

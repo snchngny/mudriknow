@@ -1,0 +1,27 @@
+const { spawn } = require('node:child_process');
+const fs = require('node:fs'), path = require('node:path'), ts = require('typescript');
+const root = path.resolve(__dirname, '..');
+const file = path.join(root, 'src/shared/providers.ts');
+const Module = require('node:module'), m = new Module(file, module);
+m.filename = file; m.paths = Module._nodeModulePaths(path.dirname(file));
+m._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, file);
+const env = m.exports.buildCleanOpenCodeEnv(process.env, {});
+for (const key of Object.keys(env)) if (/API_KEY|TOKEN|SECRET/.test(key)) delete env[key];
+const runtime = path.join(root, '.local/runtime');
+const model = process.argv.find(v => v.startsWith('openai/')) || 'openai/gpt-6-luna';
+env.XDG_DATA_HOME = path.join(runtime, 'opencode-data');
+env.XDG_CONFIG_HOME = path.join(runtime, 'workspace/opencode-config');
+env.XDG_CACHE_HOME = path.join(runtime, 'opencode-cache');
+const child = spawn(path.join(root, '.local/bundled-opencode', process.platform === 'win32' ? 'opencode.exe' : 'opencode'), ['run', '--format', 'json', '--model', model, '--agent', 'readonly'], { cwd: path.join(runtime, 'workspace'), env, windowsHide: true });
+let raw = ''; child.stdout.on('data', b => raw += b); child.stderr.resume();
+child.stdin.end('Reply only LOGIN_OK_6427. Do not use tools.');
+const timer = setTimeout(() => child.kill(), 90000);
+child.on('close', code => {
+  clearTimeout(timer);
+  const events = raw.split('\n').flatMap(l => { try { return [JSON.parse(l)]; } catch { return []; } });
+  const text = events.filter(e => e.type === 'text').map(e => e.part?.text || '').join('');
+  const safeError = events.filter(e => e.type === 'error').map(e => ({ name: e.error?.name, status: e.error?.data?.statusCode, message: String(e.error?.data?.message || e.error?.message || '').replace(/https?:[^\s]+/g, '[URL]').replace(/(?:sk-|eyJ)[A-Za-z0-9_.-]+/g, '[redacted]').slice(0, 400) }));
+  const result = { code, oauthOnly: true, model, answer: text, ok: !code && text.trim() === 'LOGIN_OK_6427', errors: safeError };
+  fs.writeFileSync(path.join(root, '.local/verification/chatgpt-login.json'), JSON.stringify(result, null, 2));
+  console.log(JSON.stringify(result)); if (!result.ok) process.exitCode = 1;
+});
