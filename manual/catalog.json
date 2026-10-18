@@ -10,6 +10,16 @@
       "documentVersion": "",
       "language": "en",
       "license": "URL only; original content remains with its publisher"
+    },
+    {
+      "id": "80ef1e0cefd572e1e78b01d0497edb94017c58d4af1c351b173b33334435165a",
+      "appName": "7-Zip",
+      "platform": "windows",
+      "title": "7-Zip official archive recovery guide",
+      "url": "https://www.7-zip.org/recover.html",
+      "documentVersion": "",
+      "language": "en",
+      "license": "URL only; original content remains with its publisher"
     }
   ]
 }
