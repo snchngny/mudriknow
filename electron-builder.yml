@@ -31,8 +31,11 @@ win:
   icon: assets/icon.ico
   artifactName: MudrikNow-Setup-${version}.${ext}
 mac:
+  icon: assets/hero-mascot.png
   target: [dmg, zip]
   category: public.app-category.productivity
+  extendInfo:
+    NSScreenCaptureUsageDescription: 質問に答えるため、選択したアプリの画面を取得します
   artifactName: MudrikNow-${version}-${arch}.${ext}
   binaries:
     - Resources/app.asar.unpacked/node_modules/get-windows/main
